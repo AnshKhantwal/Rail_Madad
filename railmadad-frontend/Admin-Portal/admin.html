@@ -12,7 +12,7 @@
   <div class="flex">
     
     <!-- Sidebar -->
-    <aside class="w-64 bg-blue-900 text-white h-100% p-6">
+    <aside class="w-40 bg-blue-900 text-white h-100% p-6">
       <h1 class="text-2x1 font-bold mb-12 text-center">🚉 Rail Madad Admin</h1>
       <nav class="space-y-4">
         <a href="#dashboard" class="block hover:text-yellow-300 text-center">Dashboard</a>
@@ -74,6 +74,11 @@
           <option value="In Progress">In-Progess</option>
           <option value="Resolved">Resolved</option>
           </select>
+          <label for="start-date" class="font-medium">From:</label>
+<input type="date" id="start-date" class="p-2 border border-gray-300 rounded">
+
+<label for="end-date" class="font-medium">To:</label>
+<input type="date" id="end-date" class="p-2 border border-gray-300 rounded">
           <button onclick="applyFilters()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
 
           <button onclick="resetFilters()" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
@@ -289,24 +294,31 @@ function renderComplaints(complaints) {
 function applyFilters() {
   const department = document.getElementById('department-filter').value.trim();
   const status = document.getElementById('status-filter').value.trim();
+  const startDate = document.getElementById('start-date').value;
+  const endDate = document.getElementById('end-date').value;
 
   const filtered = window.allComplaints.filter(c => {
     const matchesDept = department ? (c.department === department) : true;
     const matchesStatus = status ? (c.status === status) : true;
-    return matchesDept && matchesStatus;
+
+    const createdAt = new Date(c.created_at).toISOString().split('T')[0]; // format: yyyy-mm-dd
+    const matchesStart = startDate ? (createdAt >= startDate) : true;
+    const matchesEnd = endDate ? (createdAt <= endDate) : true;
+
+    return matchesDept && matchesStatus && matchesStart && matchesEnd;
   });
 
   renderComplaints(filtered);
 }
 
 function resetFilters() {
-  // Reset dropdowns
   document.getElementById('department-filter').value = '';
   document.getElementById('status-filter').value = '';
-
-  // Re-render all complaints
+  document.getElementById('start-date').value = '';
+  document.getElementById('end-date').value = '';
   renderComplaints(window.allComplaints);
 }
+
 
 </script>
 </body>
