@@ -76,6 +76,10 @@
           </select>
           <button onclick="applyFilters()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
 
+          <button onclick="resetFilters()" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+  Reset
+</button>
+
           <!-- <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button> -->
         </div>
 
@@ -295,7 +299,14 @@ function applyFilters() {
   renderComplaints(filtered);
 }
 
+function resetFilters() {
+  // Reset dropdowns
+  document.getElementById('department-filter').value = '';
+  document.getElementById('status-filter').value = '';
 
+  // Re-render all complaints
+  renderComplaints(window.allComplaints);
+}
 
 </script>
 </body>
